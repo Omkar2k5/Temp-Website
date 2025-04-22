@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: #f8f8f8;
+}
+
+@layer components {
+  .container-custom {
+    @apply container mx-auto px-4 sm:px-6 max-w-7xl;
+  }
+  
+  .btn {
+    @apply px-4 py-2 rounded-md font-medium transition duration-200 ease-in-out;
+  }
+  
+  .btn-primary {
+    @apply bg-primary-700 text-white hover:bg-primary-800 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary-500 text-white hover:bg-secondary-600 focus:ring-2 focus:ring-secondary-400 focus:ring-offset-2;
+  }
+  
+  .nav-link {
+    @apply px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200;
+  }
+  
+  .nav-link-desktop {
+    @apply text-gray-700 hover:bg-primary-50 hover:text-primary-700;
+  }
+  
+  .nav-link-mobile {
+    @apply block text-base font-medium text-gray-700 hover:bg-primary-50 hover:text-primary-700;
+  }
+}
