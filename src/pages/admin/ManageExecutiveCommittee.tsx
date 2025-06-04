@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Users, Save, RefreshCw, Edit, Plus, Trash2 } from 'lucide-react';
 import { executiveCommitteeService, ExecutiveCommittee } from '../../services/firebaseService';
-import ConfirmDialog from '../../components/admin/ConfirmDialog';
 
 const ManageExecutiveCommittee: React.FC = () => {
   const [committee, setCommittee] = useState<ExecutiveCommittee[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [editingItem, setEditingItem] = useState<ExecutiveCommittee | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<string | null>(null);
+
   const [formData, setFormData] = useState({
     name: '',
     position: '',
     phone: '',
     email: '',
+    address: '',
+    education: '',
+    job: '',
     description: '',
-    photo: '',
+    imageUrl: '',
+    tenure: '',
     order: 1,
     isActive: true
   });
@@ -43,8 +45,12 @@ const ManageExecutiveCommittee: React.FC = () => {
       position: item.position,
       phone: item.phone || '',
       email: item.email || '',
+      address: item.address || '',
+      education: item.education || '',
+      job: item.job || '',
       description: item.description || '',
-      photo: item.photo || '',
+      imageUrl: item.imageUrl || '',
+      tenure: item.tenure || '',
       order: item.order,
       isActive: item.isActive
     });
@@ -58,26 +64,23 @@ const ManageExecutiveCommittee: React.FC = () => {
       position: '',
       phone: '',
       email: '',
+      address: '',
+      education: '',
+      job: '',
       description: '',
-      photo: '',
+      imageUrl: '',
+      tenure: 'कार्यकाल २०१७ - २०२०',
       order: committee.length + 1,
       isActive: true
     });
     setShowAddForm(true);
   };
 
-  const handleDelete = (id: string) => {
-    setItemToDelete(id);
-    setShowDeleteDialog(true);
-  };
-
-  const confirmDelete = async () => {
-    if (itemToDelete) {
+  const handleDelete = async (id: string, memberName: string) => {
+    if (window.confirm(`तुम्हाला खात्री आहे की तुम्ही ${memberName} या सदस्याला हटवू इच्छिता?`)) {
       try {
-        await executiveCommitteeService.delete(itemToDelete);
+        await executiveCommitteeService.delete(id);
         loadCommittee();
-        setShowDeleteDialog(false);
-        setItemToDelete(null);
         alert('सदस्य यशस्वीरित्या हटवला!');
       } catch (error) {
         console.error('Error deleting member:', error);
@@ -179,9 +182,9 @@ const ManageExecutiveCommittee: React.FC = () => {
               <div key={member.id || index} className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start space-x-4">
-                    {member.photo && (
+                    {(member.imageUrl || member.photo) && (
                       <img
-                        src={member.photo}
+                        src={member.imageUrl || member.photo}
                         alt={member.name}
                         className="w-16 h-16 rounded-full object-cover"
                       />
@@ -196,11 +199,23 @@ const ManageExecutiveCommittee: React.FC = () => {
                         </span>
                       </div>
                       <p className="text-primary-600 font-medium mb-1">{member.position}</p>
+                      {member.education && (
+                        <p className="text-sm text-gray-600">🎓 {member.education}</p>
+                      )}
+                      {member.job && (
+                        <p className="text-sm text-gray-600">💼 {member.job}</p>
+                      )}
                       {member.phone && (
                         <p className="text-sm text-gray-600">📞 {member.phone}</p>
                       )}
                       {member.email && (
                         <p className="text-sm text-gray-600">✉️ {member.email}</p>
+                      )}
+                      {member.address && (
+                        <p className="text-sm text-gray-600">📍 {member.address}</p>
+                      )}
+                      {member.tenure && (
+                        <p className="text-sm text-gray-500 italic">⏰ {member.tenure}</p>
                       )}
                       {member.description && (
                         <p className="text-sm text-gray-700 mt-2">{member.description}</p>
@@ -227,7 +242,7 @@ const ManageExecutiveCommittee: React.FC = () => {
                     </button>
                     {member.id && (
                       <button
-                        onClick={() => handleDelete(member.id!)}
+                        onClick={() => handleDelete(member.id!, member.name)}
                         className="p-2 text-red-600 hover:bg-red-50 rounded-md"
                         title="हटवा"
                       >
@@ -305,11 +320,51 @@ const ManageExecutiveCommittee: React.FC = () => {
                     />
                   </div>
                   <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">पत्ता</label>
+                    <input
+                      type="text"
+                      name="address"
+                      value={formData.address}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">शिक्षण</label>
+                    <input
+                      type="text"
+                      name="education"
+                      value={formData.education}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">जॉब</label>
+                    <input
+                      type="text"
+                      name="job"
+                      value={formData.job}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    />
+                  </div>
+                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">फोटो URL</label>
                     <input
                       type="url"
-                      name="photo"
-                      value={formData.photo}
+                      name="imageUrl"
+                      value={formData.imageUrl}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">कार्यकाल</label>
+                    <input
+                      type="text"
+                      name="tenure"
+                      value={formData.tenure}
                       onChange={handleChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                     />
@@ -371,17 +426,7 @@ const ManageExecutiveCommittee: React.FC = () => {
         </div>
       )}
 
-      {/* Delete Confirmation Dialog */}
-      <ConfirmDialog
-        isOpen={showDeleteDialog}
-        onClose={() => setShowDeleteDialog(false)}
-        onConfirm={confirmDelete}
-        title="सदस्य हटवा"
-        message="तुम्हाला खात्री आहे की तुम्ही हा सदस्य हटवू इच्छिता? ही क्रिया पूर्ववत करता येणार नाही."
-        confirmText="हटवा"
-        cancelText="रद्द करा"
-        type="danger"
-      />
+
     </div>
   );
 };

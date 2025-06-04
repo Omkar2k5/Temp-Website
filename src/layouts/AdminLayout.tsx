@@ -28,17 +28,19 @@ const AdminLayout: React.FC = () => {
   };
 
   if (!isAuthenticated || !isAdmin) {
-    return null;
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-700 mx-auto mb-4"></div>
+          <p className="text-gray-600">प्रमाणीकरण तपासत आहे...</p>
+        </div>
+      </div>
+    );
   }
 
   const navItems = [
-    { path: '/admin', icon: <Home size={20} />, label: 'डॅशबोर्ड', exact: true },
-    { path: '/admin/home-content', icon: <Settings size={20} />, label: 'मुख्य पृष्ठ व्यवस्थापन' },
+    { path: '/admin/home-content', icon: <Home size={20} />, label: 'मुख्य पृष्ठ व्यवस्थापन', exact: true },
     { path: '/admin/executive-committee', icon: <Users size={20} />, label: 'कार्यकारिणी व्यवस्थापन' },
-    { path: '/admin/members', icon: <Users size={20} />, label: 'सभासद व्यवस्थापन' },
-    { path: '/admin/bride-groom', icon: <Heart size={20} />, label: 'वधू-वर व्यवस्थापन' },
-    { path: '/admin/census', icon: <FileText size={20} />, label: 'खानेसुमारी व्यवस्थापन' },
-    { path: '/admin/feedback', icon: <MessageSquare size={20} />, label: 'अभिप्राय व्यवस्थापन' },
   ];
 
   return (
@@ -94,28 +96,12 @@ const AdminLayout: React.FC = () => {
             </ul>
           </div>
           
-          {/* Quick Stats */}
+          {/* Quick Info */}
           <div className="p-4 border-t border-gray-200 mt-8">
-            <h3 className="text-sm font-medium text-gray-500 mb-3">द्रुत आकडेवारी</h3>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">एकूण सभासद</span>
-                <span className="font-medium text-primary-700">
-                  {JSON.parse(localStorage.getItem('gadilohar_members') || '[]').length}
-                </span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">वधू-वर नोंदणी</span>
-                <span className="font-medium text-primary-700">
-                  {JSON.parse(localStorage.getItem('gadilohar_bride_groom') || '[]').length}
-                </span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">अभिप्राय</span>
-                <span className="font-medium text-primary-700">
-                  {JSON.parse(localStorage.getItem('gadilohar_feedback') || '[]').length}
-                </span>
-              </div>
+            <h3 className="text-sm font-medium text-gray-500 mb-3">माहिती</h3>
+            <div className="space-y-2 text-xs text-gray-600">
+              <p>मुख्य पृष्ठावरील माहिती संपादित करा</p>
+              <p>कार्यकारिणी सदस्य व्यवस्थापित करा</p>
             </div>
           </div>
         </nav>

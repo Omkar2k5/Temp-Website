@@ -38,12 +38,16 @@ export interface ExecutiveCommittee {
   id?: string;
   name: string;
   position: string;
-  photo?: string;
   phone?: string;
   email?: string;
+  address?: string;
+  education?: string;
+  job?: string;
   description?: string;
+  imageUrl?: string;
   order: number;
   isActive: boolean;
+  tenure?: string;
   createdAt?: any;
   updatedAt?: any;
 }

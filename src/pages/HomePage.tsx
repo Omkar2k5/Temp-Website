@@ -17,7 +17,7 @@ const HomePage: React.FC = () => {
 
   const loadHomeContent = async () => {
     try {
-      // Initialize content if it doesn't exist
+      // Initialize content only if it doesn't exist
       await initializeHomeContent();
 
       // Load content from Firebase
@@ -128,65 +128,7 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* History Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container-custom">
-          <div className="bg-white rounded-lg shadow-md p-8">
-            <h2 className="text-3xl font-bold mb-6 text-primary-700">गाडी लोहार जातीचा उदय</h2>
-            
-            <div className="prose max-w-none">
-              <p className="mb-4">
-                एक जात म्हणजे गाडी लोहार समाज, ही जात लोखंडी हत्यारे बनविणारे आणि बैलगाडीतून ते हिंडून विकणारे कारागीर होय. पंडित महादेवशास्त्री द्वारा लिखित भारतीय संस्कृती कोश खंड दुसरा पृष्ठ क्रमांक ७७५ या पुस्तकानुसार ही जात प्रथम राजस्थानमध्ये होती पुढे ही जात व्यवसाया निमित्त इतरत्र भटकू लागली.
-              </p>
 
-              <p className="mb-4">
-                या जातीच्या दोन पोट जाती आहेत एकीला गाडी लोहार आणि दुसरीला मालवीय म्हणतात. हे लोक पीठव्याचे वंशज म्हणवत असुन त्यांच्या उत्पत्तीची दंतकथा अशी आहे की, पार्वतीने शिवाच्या पाठीवरील विभूती पासून त्यांना उत्पन्न केले शिवाला अंधकार व दंडकार या दोन राक्षसांना मारायचे होते व त्यांना त्यासाठी हत्यारांची आवश्यकता होती. ती तयार करण्यासाठी पार्वतीने त्यांची निर्मिती केली.
-              </p>
-
-              <p className="mb-4">
-                चितोड गडावरील राजपूत विरांना युध्दोपयोगी हत्यारे बनवून देण्याचे काम हे लोक करीत होते. चितोडगडाचा व तेथील राज्यकर्त्यांचा आणि सगळ्या राजस्थानच्या स्वातंत्र्याचा त्यांना अभिमान होता. इ. स. १५६८ साली अकबराने चितोडगड काबीज केला ही गोष्ट गाडी लोहारांना दुःखदायक व अपमानकारक वाटली म्हणून त्यांनी ठरवले की, यापुढे चितोडच्या परिसरात राहायचे नाही व चितोड पुनश्च स्वतंत्र होईपर्यंत गंभीरा नदी ओलांडून चितोडगडात प्रवेश करायचा नाही.
-              </p>
-
-              <div className="my-8 text-center">
-                <div className="inline-block bg-primary-50 px-8 py-4 rounded-lg border-l-4 border-primary-700">
-                  <p className="text-xl font-bold text-primary-700 italic">
-                    "लहारोसे डर कर नौका पार नहीं होती।<br />
-                    कोशिश करने वालो की हार नही होती।।"
-                  </p>
-                </div>
-              </div>
-
-              <h3 className="text-2xl font-bold mt-8 mb-4 text-primary-700">गाडी लोहार समाज उन्नती मंडळ कल्याणचा उदय</h3>
-
-              <p className="mb-4">
-                मनुष्य हा स्वभावत: समाजप्रिय आहे आज तो प्रगत विकसित झाला आहे. माणसाला एकटे राहणे आवडत नाही त्याच उद्देशाने आम्ही कल्याण निवासी गाडी लोहार समाज बांधव आपल्या मुळ समाज व गटापासून उपजीविकेच्या शोधार्थ आपले मुख्य व्यवसाय अनेक कारणांनी सोडून बाहेर पडलो.
-              </p>
-
-              <div className="mt-8">
-                <div className="bg-gray-50 p-6 rounded-lg">
-                  <h4 className="text-xl font-bold mb-4 text-primary-700">संकलन</h4>
-                  <div className="flex flex-col md:flex-row items-center gap-4">
-                    <img 
-                      src="/public/yuvraj-jadhav-closeup.webp" 
-                      alt="श्री युवराज मुरार जाधव" 
-                      className="w-24 h-24 rounded-full object-cover"
-                    />
-                    <div>
-                      <p className="font-bold">श्री युवराज मुरार जाधव</p>
-                      <p>अध्यक्ष</p>
-                      <p>गाडी लोहार समाज उन्नती मंडळ</p>
-                      <p>कल्याण जि. ठाणे</p>
-                      <p>कार्याअघ्यक्ष - अखिल भारतीय श्री विश्वकर्मा प्रबोधिनी संस्था</p>
-                      <p>प्रदेश अघ्यक्ष - अखिल लोहार गाडी लोहार समाज विकास संस्था महाराष्ट्र राज्य</p>
-                      <p className="mt-2">मोबाईल - ९८६९३५८८६४</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
       
       {/* Features Section */}
       <section className="py-16 bg-gray-50">

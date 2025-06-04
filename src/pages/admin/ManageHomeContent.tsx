@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Home, Save, RefreshCw, Edit, Plus } from 'lucide-react';
+import { Home, Save, RefreshCw, Edit, Plus, Trash2 } from 'lucide-react';
 import { communityInfoService, CommunityInfo } from '../../services/firebaseService';
+import { clearAllExistingData, initializeAllData } from '../../utils/initializeData';
 
 const ManageHomeContent: React.FC = () => {
   const [homeContent, setHomeContent] = useState<CommunityInfo[]>([]);
@@ -96,6 +97,28 @@ const ManageHomeContent: React.FC = () => {
     }));
   };
 
+  const handleResetData = async () => {
+    if (window.confirm('तुम्हाला खात्री आहे की तुम्ही सर्व डेटा रीसेट करून नवीन डेटा लोड करू इच्छिता? हे सर्व जुना डेटा हटवेल.')) {
+      setIsLoading(true);
+      try {
+        // First clear all existing data
+        await clearAllExistingData();
+
+        // Then initialize fresh data
+        await initializeAllData();
+
+        // Reload the content
+        await loadHomeContent();
+
+        alert('सर्व डेटा यशस्वीरित्या रीसेट केला आणि नवीन डेटा लोड केला!');
+      } catch (error) {
+        console.error('Error resetting data:', error);
+        alert('डेटा रीसेट करताना त्रुटी आली.');
+      }
+      setIsLoading(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -117,6 +140,13 @@ const ManageHomeContent: React.FC = () => {
           </div>
         </div>
         <div className="flex space-x-3">
+          <button
+            onClick={handleResetData}
+            className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+          >
+            <Trash2 className="h-4 w-4" />
+            <span>डेटा रीसेट करा</span>
+          </button>
           <button
             onClick={loadHomeContent}
             className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"

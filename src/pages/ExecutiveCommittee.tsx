@@ -12,7 +12,7 @@ const ExecutiveCommittee: React.FC = () => {
 
   const loadExecutiveCommittee = async () => {
     try {
-      // Initialize committee if it doesn't exist
+      // Initialize committee only if it doesn't exist
       await initializeExecutiveCommittee();
 
       // Load committee from Firebase
@@ -154,10 +154,14 @@ const ExecutiveCommittee: React.FC = () => {
   return (
     <div className="py-10 bg-gray-50 min-h-screen">
       <div className="container-custom">
-        <h1 className="text-3xl font-bold mb-2 text-primary-700">कार्यकारिणी</h1>
-        <p className="mb-8 text-gray-600">
-          गाडी लोहार समाज उन्नती मंडळाच्या कार्यकारिणीची माहिती.
-        </p>
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold mb-2 text-primary-700">गाडी लोहार समाज उन्नती मंडळ कल्याण</h1>
+          <h2 className="text-2xl font-semibold mb-2 text-secondary-600">कार्यकारिणी</h2>
+          <p className="text-lg text-gray-700 font-medium">(कार्यकाल २०१७ - २०२०)</p>
+          <p className="mt-2 text-gray-600">
+            गाडी लोहार समाज उन्नती मंडळाच्या कार्यकारिणीची माहिती.
+          </p>
+        </div>
 
         {isLoading ? (
           <div className="flex justify-center items-center py-12">
@@ -168,10 +172,10 @@ const ExecutiveCommittee: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {executiveMembers.map((member, index) => (
             <div key={member.id || index} className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
-              {member.photo && (
+              {(member.imageUrl || member.photo) && (
                 <div className="h-56 overflow-hidden">
                   <img
-                    src={member.photo}
+                    src={member.imageUrl || member.photo}
                     alt={member.name}
                     className="w-full h-full object-cover object-center"
                   />
@@ -180,14 +184,32 @@ const ExecutiveCommittee: React.FC = () => {
               <div className="p-4">
                 <h2 className="text-lg font-bold text-primary-700">{member.name}</h2>
                 <p className="text-secondary-600 font-medium mb-2">{member.position}</p>
+
+                {(member as any).education && (
+                  <p className="text-gray-700 text-sm mb-1">
+                    <span className="font-medium">शिक्षण:</span> {(member as any).education}
+                  </p>
+                )}
+
+                {(member as any).job && (
+                  <p className="text-gray-700 text-sm mb-1">
+                    <span className="font-medium">जॉब:</span> {(member as any).job}
+                  </p>
+                )}
+
+                {member.phone && (
+                  <p className="text-gray-700 text-sm mb-1">
+                    <span className="font-medium">मोबाइल:</span>
+                    <a href={`tel:${member.phone}`} className="text-primary-600 hover:text-primary-800 ml-1">
+                      {member.phone} कॉल करा
+                    </a>
+                  </p>
+                )}
+
                 {member.description && (
                   <p className="text-gray-700 text-sm mb-2">{member.description}</p>
                 )}
-                {member.phone && (
-                  <p className="text-gray-700 text-sm mb-1">
-                    <span className="font-medium">फोन:</span> {member.phone}
-                  </p>
-                )}
+
                 {member.email && (
                   <p className="text-gray-700 text-sm">
                     <span className="font-medium">ईमेल:</span> {member.email}

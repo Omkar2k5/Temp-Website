@@ -25,11 +25,6 @@ import IncomeExpenditure from './pages/IncomeExpenditure';
 
 // Admin Pages
 import AdminLogin from './pages/AdminLogin';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import ManageMembers from './pages/admin/ManageMembers';
-import ManageBrideGroom from './pages/admin/ManageBrideGroom';
-import ManageCensus from './pages/admin/ManageCensus';
-import ManageFeedback from './pages/admin/ManageFeedback';
 import ManageHomeContent from './pages/admin/ManageHomeContent';
 import ManageExecutiveCommittee from './pages/admin/ManageExecutiveCommittee';
 
@@ -60,13 +55,9 @@ function App() {
 
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
+            <Route index element={<ManageHomeContent />} />
             <Route path="home-content" element={<ManageHomeContent />} />
             <Route path="executive-committee" element={<ManageExecutiveCommittee />} />
-            <Route path="members" element={<ManageMembers />} />
-            <Route path="bride-groom" element={<ManageBrideGroom />} />
-            <Route path="census" element={<ManageCensus />} />
-            <Route path="feedback" element={<ManageFeedback />} />
           </Route>
         </Routes>
       </Router>
