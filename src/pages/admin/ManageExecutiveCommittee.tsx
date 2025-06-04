@@ -159,28 +159,29 @@ const ManageExecutiveCommittee: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
         <div className="flex items-center space-x-3">
-          <Users className="h-8 w-8 text-primary-700" />
+          <Users className="h-6 w-6 lg:h-8 lg:w-8 text-primary-700" />
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">कार्यकारिणी समिती व्यवस्थापन</h1>
-            <p className="text-gray-600">कार्यकारिणी समितीच्या सदस्यांची माहिती व्यवस्थापित करा</p>
+            <h1 className="text-xl lg:text-2xl font-bold text-gray-900">कार्यकारिणी समिती व्यवस्थापन</h1>
+            <p className="text-sm lg:text-base text-gray-600">कार्यकारिणी समितीच्या सदस्यांची माहिती व्यवस्थापित करा</p>
           </div>
         </div>
-        <div className="flex space-x-3">
+        <div className="flex flex-wrap gap-2 lg:space-x-3">
           <button
             onClick={loadCommittee}
-            className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+            className="flex items-center space-x-1 lg:space-x-2 px-3 lg:px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm lg:text-base"
           >
             <RefreshCw className="h-4 w-4" />
             <span>रिफ्रेश</span>
           </button>
           <button
             onClick={handleAdd}
-            className="flex items-center space-x-2 px-4 py-2 bg-primary-700 text-white rounded-md hover:bg-primary-800"
+            className="flex items-center space-x-1 lg:space-x-2 px-3 lg:px-4 py-2 bg-primary-700 text-white rounded-md hover:bg-primary-800 text-sm lg:text-base"
           >
             <Plus className="h-4 w-4" />
-            <span>नवीन सदस्य जोडा</span>
+            <span className="hidden sm:block">नवीन सदस्य जोडा</span>
+            <span className="sm:hidden">जोडा</span>
           </button>
         </div>
       </div>
@@ -200,9 +201,9 @@ const ManageExecutiveCommittee: React.FC = () => {
         ) : (
           <div className="divide-y divide-gray-200">
             {committee.map((member, index) => (
-              <div key={member.id || index} className="p-6">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start space-x-4">
+              <div key={member.id || index} className="p-4 lg:p-6">
+                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between space-y-3 lg:space-y-0">
+                  <div className="flex items-start space-x-3 lg:space-x-4">
                     {(member.imageUrl || (member as any).photo) && (
                       <img
                         src={
@@ -211,43 +212,45 @@ const ManageExecutiveCommittee: React.FC = () => {
                             : member.imageUrl || (member as any).photo
                         }
                         alt={member.name}
-                        className="w-16 h-16 rounded-full object-cover"
+                        className="w-12 h-12 lg:w-16 lg:h-16 rounded-full object-cover flex-shrink-0"
                       />
                     )}
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-3 mb-2">
-                        <h3 className="text-lg font-semibold text-gray-900">{member.name}</h3>
-                        <span className={`px-2 py-1 text-xs rounded-full ${
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-3 mb-2">
+                        <h3 className="text-base lg:text-lg font-semibold text-gray-900 truncate">{member.name}</h3>
+                        <span className={`px-2 py-1 text-xs rounded-full w-fit ${
                           member.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                         }`}>
                           {member.isActive ? 'सक्रिय' : 'निष्क्रिय'}
                         </span>
                       </div>
-                      <p className="text-primary-600 font-medium mb-1">{member.position}</p>
-                      {member.education && (
-                        <p className="text-sm text-gray-600">🎓 {member.education}</p>
-                      )}
-                      {member.job && (
-                        <p className="text-sm text-gray-600">💼 {member.job}</p>
-                      )}
-                      {member.phone && (
-                        <p className="text-sm text-gray-600">📞 {member.phone}</p>
-                      )}
-                      {member.email && (
-                        <p className="text-sm text-gray-600">✉️ {member.email}</p>
-                      )}
-                      {member.address && (
-                        <p className="text-sm text-gray-600">📍 {member.address}</p>
-                      )}
-                      {member.tenure && (
-                        <p className="text-sm text-gray-500 italic">⏰ {member.tenure}</p>
-                      )}
-                      {member.description && (
-                        <p className="text-sm text-gray-700 mt-2">{member.description}</p>
-                      )}
+                      <p className="text-primary-600 font-medium mb-1 text-sm lg:text-base">{member.position}</p>
+                      <div className="space-y-1">
+                        {member.education && (
+                          <p className="text-xs lg:text-sm text-gray-600">🎓 {member.education}</p>
+                        )}
+                        {member.job && (
+                          <p className="text-xs lg:text-sm text-gray-600">💼 {member.job}</p>
+                        )}
+                        {member.phone && (
+                          <p className="text-xs lg:text-sm text-gray-600">📞 {member.phone}</p>
+                        )}
+                        {member.email && (
+                          <p className="text-xs lg:text-sm text-gray-600 truncate">✉️ {member.email}</p>
+                        )}
+                        {member.address && (
+                          <p className="text-xs lg:text-sm text-gray-600">📍 {member.address}</p>
+                        )}
+                        {member.tenure && (
+                          <p className="text-xs lg:text-sm text-gray-500 italic">⏰ {member.tenure}</p>
+                        )}
+                        {member.description && (
+                          <p className="text-xs lg:text-sm text-gray-700 mt-2">{member.description}</p>
+                        )}
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2 ml-4">
+                  <div className="flex items-center space-x-2 lg:ml-4">
                     <button
                       onClick={() => handleEdit(member)}
                       className="p-2 text-blue-600 hover:bg-blue-50 rounded-md"
@@ -257,13 +260,14 @@ const ManageExecutiveCommittee: React.FC = () => {
                     </button>
                     <button
                       onClick={() => handleToggleActive(member)}
-                      className={`px-3 py-1 text-xs rounded-md ${
-                        member.isActive 
-                          ? 'bg-red-100 text-red-700 hover:bg-red-200' 
+                      className={`px-2 lg:px-3 py-1 text-xs rounded-md ${
+                        member.isActive
+                          ? 'bg-red-100 text-red-700 hover:bg-red-200'
                           : 'bg-green-100 text-green-700 hover:bg-green-200'
                       }`}
                     >
-                      {member.isActive ? 'निष्क्रिय करा' : 'सक्रिय करा'}
+                      <span className="hidden sm:block">{member.isActive ? 'निष्क्रिय करा' : 'सक्रिय करा'}</span>
+                      <span className="sm:hidden">{member.isActive ? 'निष्क्रिय' : 'सक्रिय'}</span>
                     </button>
                     {member.id && (
                       <button

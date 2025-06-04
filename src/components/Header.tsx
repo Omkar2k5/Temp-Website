@@ -123,19 +123,34 @@ const Header: React.FC<HeaderProps> = ({ isScrolled }) => {
           ))}
         </div>
         <div className="pt-4 pb-3 border-t border-gray-200">
-          <div className="flex items-center px-5 gap-2">
-            {socialLinks.map((link, index) => (
-              <a 
-                key={index} 
-                href={link.url} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-primary-700"
-                aria-label={link.title}
-              >
-                {link.icon}
+          <div className="flex items-center justify-between px-5">
+            <div className="flex items-center gap-2">
+              {socialLinks.map((link, index) => (
+                <a
+                  key={index}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-primary-700"
+                  aria-label={link.title}
+                >
+                  {link.icon}
+                </a>
+              ))}
+            </div>
+            <div className="flex items-center gap-4">
+              <a href="tel:+919869358864" className="text-sm flex items-center gap-1 text-gray-600">
+                <Phone size={16} />
+                <span>९८६९३५८८६४</span>
               </a>
-            ))}
+              <Link
+                to="/admin/login"
+                className="text-sm text-primary-700 hover:text-primary-900 font-medium transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                प्रशासक
+              </Link>
+            </div>
           </div>
         </div>
       </div>

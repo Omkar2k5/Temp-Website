@@ -1,20 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate, NavLink } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { 
-  LogOut, 
-  Home, 
-  Users, 
-  Heart, 
-  FileText, 
+import {
+  LogOut,
+  Home,
+  Users,
+  Heart,
+  FileText,
   MessageSquare,
   BarChart3,
-  Settings
+  Settings,
+  Menu,
+  X
 } from 'lucide-react';
 
 const AdminLayout: React.FC = () => {
   const { isAuthenticated, isAdmin, logout, user } = useAuth();
   const navigate = useNavigate();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated || !isAdmin) {
@@ -25,6 +28,10 @@ const AdminLayout: React.FC = () => {
   const handleLogout = () => {
     logout();
     navigate('/');
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
   };
 
   if (!isAuthenticated || !isAdmin) {
@@ -50,29 +57,50 @@ const AdminLayout: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-xl font-bold text-primary-700">
+              {/* Mobile menu button */}
+              <button
+                onClick={toggleSidebar}
+                className="lg:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-primary-700 hover:bg-primary-50 focus:outline-none mr-3"
+              >
+                {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+              <h1 className="text-lg lg:text-xl font-bold text-primary-700">
                 प्रशासक पॅनल - गाडी लोहार समाज
               </h1>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">
+            <div className="flex items-center space-x-2 lg:space-x-4">
+              <span className="text-xs lg:text-sm text-gray-600 hidden sm:block">
                 स्वागत, {user?.username}
               </span>
               <button
                 onClick={handleLogout}
-                className="flex items-center space-x-2 text-gray-600 hover:text-red-600 transition-colors"
+                className="flex items-center space-x-1 lg:space-x-2 text-gray-600 hover:text-red-600 transition-colors text-sm lg:text-base"
               >
-                <LogOut size={18} />
-                <span>लॉगआउट</span>
+                <LogOut size={16} className="lg:w-[18px] lg:h-[18px]" />
+                <span className="hidden sm:block">लॉगआउट</span>
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="flex">
+      <div className="flex relative">
+        {/* Mobile Sidebar Overlay */}
+        {isSidebarOpen && (
+          <div
+            className="lg:hidden fixed inset-0 z-40 bg-black bg-opacity-50"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
+
         {/* Sidebar */}
-        <nav className="w-64 bg-white shadow-sm min-h-screen">
+        <nav className={`
+          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+          lg:translate-x-0 lg:static lg:inset-0
+          fixed inset-y-0 left-0 z-50
+          w-64 bg-white shadow-sm min-h-screen
+          transition-transform duration-300 ease-in-out
+        `}>
           <div className="p-4">
             <ul className="space-y-2">
               {navItems.map((item) => (
@@ -80,6 +108,7 @@ const AdminLayout: React.FC = () => {
                   <NavLink
                     to={item.path}
                     end={item.exact}
+                    onClick={() => setIsSidebarOpen(false)}
                     className={({ isActive }) =>
                       `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
                         isActive
@@ -89,13 +118,13 @@ const AdminLayout: React.FC = () => {
                     }
                   >
                     {item.icon}
-                    <span className="font-medium">{item.label}</span>
+                    <span className="font-medium text-sm lg:text-base">{item.label}</span>
                   </NavLink>
                 </li>
               ))}
             </ul>
           </div>
-          
+
           {/* Quick Info */}
           <div className="p-4 border-t border-gray-200 mt-8">
             <h3 className="text-sm font-medium text-gray-500 mb-3">माहिती</h3>
@@ -107,7 +136,7 @@ const AdminLayout: React.FC = () => {
         </nav>
 
         {/* Main Content */}
-        <main className="flex-1 p-8">
+        <main className="flex-1 p-4 lg:p-8 lg:ml-0">
           <Outlet />
         </main>
       </div>
