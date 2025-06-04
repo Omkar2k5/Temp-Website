@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Users, Save, RefreshCw, Edit, Plus, Trash2 } from 'lucide-react';
 import { executiveCommitteeService, ExecutiveCommittee } from '../../services/firebaseService';
+import ImageUpload from '../../components/ImageUpload';
+import { getOptimizedImageUrl } from '../../config/cloudinary';
 
 const ManageExecutiveCommittee: React.FC = () => {
   const [committee, setCommittee] = useState<ExecutiveCommittee[]>([]);
@@ -18,6 +20,7 @@ const ManageExecutiveCommittee: React.FC = () => {
     job: '',
     description: '',
     imageUrl: '',
+    imagePublicId: '',
     tenure: '',
     order: 1,
     isActive: true
@@ -50,6 +53,7 @@ const ManageExecutiveCommittee: React.FC = () => {
       job: item.job || '',
       description: item.description || '',
       imageUrl: item.imageUrl || '',
+      imagePublicId: item.imagePublicId || '',
       tenure: item.tenure || '',
       order: item.order,
       isActive: item.isActive
@@ -69,6 +73,7 @@ const ManageExecutiveCommittee: React.FC = () => {
       job: '',
       description: '',
       imageUrl: '',
+      imagePublicId: '',
       tenure: 'कार्यकाल २०१७ - २०२०',
       order: committee.length + 1,
       isActive: true
@@ -123,6 +128,22 @@ const ManageExecutiveCommittee: React.FC = () => {
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
+    }));
+  };
+
+  const handleImageUpload = (imageUrl: string, publicId: string) => {
+    setFormData(prev => ({
+      ...prev,
+      imageUrl,
+      imagePublicId: publicId
+    }));
+  };
+
+  const handleImageRemove = () => {
+    setFormData(prev => ({
+      ...prev,
+      imageUrl: '',
+      imagePublicId: ''
     }));
   };
 
@@ -182,9 +203,13 @@ const ManageExecutiveCommittee: React.FC = () => {
               <div key={member.id || index} className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start space-x-4">
-                    {(member.imageUrl || member.photo) && (
+                    {(member.imageUrl || (member as any).photo) && (
                       <img
-                        src={member.imageUrl || member.photo}
+                        src={
+                          member.imagePublicId
+                            ? getOptimizedImageUrl(member.imagePublicId, { width: 64, height: 64, crop: 'fill' })
+                            : member.imageUrl || (member as any).photo
+                        }
                         alt={member.name}
                         className="w-16 h-16 rounded-full object-cover"
                       />
@@ -349,14 +374,13 @@ const ManageExecutiveCommittee: React.FC = () => {
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">फोटो URL</label>
-                    <input
-                      type="url"
-                      name="imageUrl"
-                      value={formData.imageUrl}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  <div className="md:col-span-2">
+                    <ImageUpload
+                      currentImageUrl={formData.imageUrl}
+                      currentPublicId={formData.imagePublicId}
+                      onImageUpload={handleImageUpload}
+                      onImageRemove={handleImageRemove}
+                      label="सदस्याचा फोटो"
                     />
                   </div>
                   <div>

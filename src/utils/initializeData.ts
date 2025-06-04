@@ -89,6 +89,7 @@ const defaultExecutiveCommittee = [
     job: 'कार्याअघ्यक्ष - अखिल भारतीय श्री विश्वकर्मा प्रबोधिनी संस्था',
     description: 'प्रदेश अघ्यक्ष - अखिल लोहार गाडी लोहार समाज विकास संस्था महाराष्ट्र राज्य',
     imageUrl: '',
+    imagePublicId: '',
     isActive: true,
     order: 1,
     tenure: 'कार्यकाल २०१७ - २०२०'
@@ -103,6 +104,7 @@ const defaultExecutiveCommittee = [
     job: 'समाजसेवक आणि संघटक',
     description: '',
     imageUrl: '',
+    imagePublicId: '',
     isActive: true,
     order: 2,
     tenure: 'कार्यकाल २०१७ - २०२०'
@@ -117,6 +119,7 @@ const defaultExecutiveCommittee = [
     job: 'आर्थिक व्यवस्थापन तज्ञ',
     description: '',
     imageUrl: '',
+    imagePublicId: '',
     isActive: true,
     order: 3,
     tenure: 'कार्यकाल २०१७ - २०२०'
@@ -131,6 +134,7 @@ const defaultExecutiveCommittee = [
     job: 'मेकॅनिकल फिटर मध्य रेल',
     description: '',
     imageUrl: '',
+    imagePublicId: '',
     isActive: true,
     order: 4,
     tenure: 'कार्यकाल २०१७ - २०२०'
@@ -145,6 +149,7 @@ const defaultExecutiveCommittee = [
     job: 'गणराज फर्निचर मार्ट',
     description: '',
     imageUrl: '',
+    imagePublicId: '',
     isActive: true,
     order: 5,
     tenure: 'कार्यकाल २०१७ - २०२०'
@@ -159,6 +164,7 @@ const defaultExecutiveCommittee = [
     job: 'मनीट्रान्सफर-किराणा मर्चन्ट',
     description: '',
     imageUrl: '',
+    imagePublicId: '',
     isActive: true,
     order: 6,
     tenure: 'कार्यकाल २०१७ - २०२०'
@@ -173,6 +179,7 @@ const defaultExecutiveCommittee = [
     job: 'प्राध्यापक ज्युनीयर कॉलेज',
     description: '',
     imageUrl: '',
+    imagePublicId: '',
     isActive: true,
     order: 7,
     tenure: 'कार्यकाल २०१७ - २०२०'
@@ -187,6 +194,7 @@ const defaultExecutiveCommittee = [
     job: 'मेँन्टनेँस मॅनेजर प्रा.',
     description: '',
     imageUrl: '',
+    imagePublicId: '',
     isActive: true,
     order: 8,
     tenure: 'कार्यकाल २०१७ - २०२०'
@@ -201,6 +209,7 @@ const defaultExecutiveCommittee = [
     job: 'ऑपरेटर हिंडाल्को कंपनी',
     description: '',
     imageUrl: '',
+    imagePublicId: '',
     isActive: true,
     order: 9,
     tenure: 'कार्यकाल २०१७ - २०२०'
@@ -215,6 +224,7 @@ const defaultExecutiveCommittee = [
     job: 'इलेक्ट्रिकल व्यवसाय',
     description: '',
     imageUrl: '',
+    imagePublicId: '',
     isActive: true,
     order: 10,
     tenure: 'कार्यकाल २०१७ - २०२०'
@@ -229,6 +239,7 @@ const defaultExecutiveCommittee = [
     job: 'सेल्स/रिप्रेझेंटेटीव एक्ज्यूकेटिव्ह',
     description: '',
     imageUrl: '',
+    imagePublicId: '',
     isActive: true,
     order: 11,
     tenure: 'कार्यकाल २०१७ - २०२०'
@@ -243,6 +254,7 @@ const defaultExecutiveCommittee = [
     job: 'पोलीस नायक(महाराष्ट्रपोलीस)',
     description: '',
     imageUrl: '',
+    imagePublicId: '',
     isActive: true,
     order: 12,
     tenure: 'कार्यकाल २०१७ - २०२०'

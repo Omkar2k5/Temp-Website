@@ -45,6 +45,7 @@ export interface ExecutiveCommittee {
   job?: string;
   description?: string;
   imageUrl?: string;
+  imagePublicId?: string;
   order: number;
   isActive: boolean;
   tenure?: string;

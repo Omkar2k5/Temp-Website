@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Executive Committee to Firebase</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2563eb;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .button {
+            background-color: #2563eb;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 20px auto;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #1d4ed8;
+        }
+        .button:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+        .error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+        .loading {
+            background-color: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #3b82f6;
+        }
+        .member-list {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .member {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #f8fafc;
+            border-left: 4px solid #2563eb;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>कार्यकारिणी समिती Firebase मध्ये जोडा</h1>
+        
+        <p style="text-align: center; color: #6b7280;">
+            हे बटण दाबून कार्यकारिणी समितीचे सर्व सदस्य Firebase डेटाबेसमध्ये जोडा
+        </p>
+        
+        <button id="addCommitteeBtn" class="button">
+            कार्यकारिणी समिती जोडा
+        </button>
+        
+        <div id="status"></div>
+        
+        <div class="member-list">
+            <h3>जोडले जाणारे सदस्य:</h3>
+            <div class="member"><strong>श्री युवराज मुरार जाधव</strong> - अध्यक्ष</div>
+            <div class="member"><strong>श्री राजेन्द्र निंबालाल जाधव</strong> - सचिव</div>
+            <div class="member"><strong>श्री सुकलाल मयाराम कु-हेकर</strong> - खजिनदार</div>
+            <div class="member"><strong>श्री प्रल्हाद दत्तात्रय कुर्‍हेकर</strong> - सदस्य (S.S.C / ITI, मेकॅनिकल फिटर मध्य रेल)</div>
+            <div class="member"><strong>श्री अनिल मक्कन गोराणे</strong> - सदस्य (S.S.C, गणराज फर्निचर मार्ट)</div>
+            <div class="member"><strong>श्री दिपक लकडु लोहार</strong> - सदस्य (B.A, मनीट्रान्सफर-किराणा मर्चन्ट)</div>
+            <div class="member"><strong>श्री हनुमान शिवलाल लोहार</strong> - सदस्य (M.A. Bed, प्राध्यापक ज्युनीयर कॉलेज)</div>
+            <div class="member"><strong>श्री धनराज रमन गोराणे</strong> - सदस्य (S.S.C, मेँन्टनेँस मॅनेजर प्रा.)</div>
+            <div class="member"><strong>श्री किशोर ब्रिजलाल लोहार</strong> - सदस्य (H.S.C / I.T.I, ऑपरेटर हिंडाल्को कंपनी)</div>
+            <div class="member"><strong>श्री गणेश पुरूषोत्तम गोराणे</strong> - सदस्य (H.S.C, इलेक्ट्रिकल व्यवसाय)</div>
+            <div class="member"><strong>श्री निलेश गिरेंद्र लोहार</strong> - सदस्य (H.S.C/ मेकॅनिकल डिप्लोमा, सेल्स/रिप्रेझेंटेटीव एक्ज्यूकेटिव्ह)</div>
+            <div class="member"><strong>श्री निलेश रतिलाल पवार</strong> - सदस्य (M.A Bed, पोलीस नायक(महाराष्ट्रपोलीस))</div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+            authDomain: "your-project.firebaseapp.com",
+            projectId: "your-project-id",
+            storageBucket: "your-project.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdefghijklmnop"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const executiveCommitteeData = [
+            {
+                name: 'श्री युवराज मुरार जाधव',
+                position: 'अध्यक्ष',
+                phone: '९८६९३५८८६४',
+                email: 'yuvraj.jadhav@example.com',
+                address: 'कल्याण, जि. ठाणे',
+                education: '',
+                job: 'कार्याअघ्यक्ष - अखिल भारतीय श्री विश्वकर्मा प्रबोधिनी संस्था',
+                description: 'प्रदेश अघ्यक्ष - अखिल लोहार गाडी लोहार समाज विकास संस्था महाराष्ट्र राज्य',
+                imageUrl: '',
+                isActive: true,
+                order: 1,
+                tenure: 'कार्यकाल २०१७ - २०२०'
+            },
+            {
+                name: 'श्री राजेन्द्र निंबालाल जाधव',
+                position: 'सचिव',
+                phone: '९८२१२३४५६७',
+                email: 'rajendra.jadhav@example.com',
+                address: 'कल्याण, जि. ठाणे',
+                education: '',
+                job: 'समाजसेवक आणि संघटक',
+                description: '',
+                imageUrl: '',
+                isActive: true,
+                order: 2,
+                tenure: 'कार्यकाल २०१७ - २०२०'
+            },
+            {
+                name: 'श्री सुकलाल मयाराम कु-हेकर',
+                position: 'खजिनदार',
+                phone: '९८३४५६७८९०',
+                email: 'suklal.kuheker@example.com',
+                address: 'कल्याण, जि. ठाणे',
+                education: '',
+                job: 'आर्थिक व्यवस्थापन तज्ञ',
+                description: '',
+                imageUrl: '',
+                isActive: true,
+                order: 3,
+                tenure: 'कार्यकाल २०१७ - २०२०'
+            },
+            {
+                name: 'श्री प्रल्हाद दत्तात्रय कुर्‍हेकर',
+                position: 'सदस्य',
+                phone: '९८३३३४७७६४',
+                email: 'pralhad.kurheker@example.com',
+                address: 'कल्याण, जि. ठाणे',
+                education: 'S.S.C / ITI',
+                job: 'मेकॅनिकल फिटर मध्य रेल',
+                description: '',
+                imageUrl: '',
+                isActive: true,
+                order: 4,
+                tenure: 'कार्यकाल २०१७ - २०२०'
+            },
+            {
+                name: 'श्री अनिल मक्कन गोराणे',
+                position: 'सदस्य',
+                phone: '९२२२२१४९६९',
+                email: 'anil.gorane@example.com',
+                address: 'कल्याण, जि. ठाणे',
+                education: 'S.S.C',
+                job: 'गणराज फर्निचर मार्ट',
+                description: '',
+                imageUrl: '',
+                isActive: true,
+                order: 5,
+                tenure: 'कार्यकाल २०१७ - २०२०'
+            },
+            {
+                name: 'श्री दिपक लकडु लोहार',
+                position: 'सदस्य',
+                phone: '९४०३०३४६८८',
+                email: 'dipak.lohar@example.com',
+                address: 'कल्याण, जि. ठाणे',
+                education: 'B.A',
+                job: 'मनीट्रान्सफर-किराणा मर्चन्ट',
+                description: '',
+                imageUrl: '',
+                isActive: true,
+                order: 6,
+                tenure: 'कार्यकाल २०१७ - २०२०'
+            },
+            {
+                name: 'श्री हनुमान शिवलाल लोहार',
+                position: 'सदस्य',
+                phone: '९८९०६८३३६५',
+                email: 'hanuman.lohar@example.com',
+                address: 'कल्याण, जि. ठाणे',
+                education: 'M.A. Bed',
+                job: 'प्राध्यापक ज्युनीयर कॉलेज',
+                description: '',
+                imageUrl: '',
+                isActive: true,
+                order: 7,
+                tenure: 'कार्यकाल २०१७ - २०२०'
+            },
+            {
+                name: 'श्री धनराज रमन गोराणे',
+                position: 'सदस्य',
+                phone: '९८९०६८३३६५',
+                email: 'dhanraj.gorane@example.com',
+                address: 'कल्याण, जि. ठाणे',
+                education: 'S.S.C',
+                job: 'मेँन्टनेँस मॅनेजर प्रा.',
+                description: '',
+                imageUrl: '',
+                isActive: true,
+                order: 8,
+                tenure: 'कार्यकाल २०१७ - २०२०'
+            },
+            {
+                name: 'श्री किशोर ब्रिजलाल लोहार',
+                position: 'सदस्य',
+                phone: '९२२४६१२५१८',
+                email: 'kishor.lohar@example.com',
+                address: 'कल्याण, जि. ठाणे',
+                education: 'H.S.C / I.T.I',
+                job: 'ऑपरेटर हिंडाल्को कंपनी',
+                description: '',
+                imageUrl: '',
+                isActive: true,
+                order: 9,
+                tenure: 'कार्यकाल २०१७ - २०२०'
+            },
+            {
+                name: 'श्री गणेश पुरूषोत्तम गोराणे',
+                position: 'सदस्य',
+                phone: '९२२४०५८०२४',
+                email: 'ganesh.gorane@example.com',
+                address: 'कल्याण, जि. ठाणे',
+                education: 'H.S.C',
+                job: 'इलेक्ट्रिकल व्यवसाय',
+                description: '',
+                imageUrl: '',
+                isActive: true,
+                order: 10,
+                tenure: 'कार्यकाल २०१७ - २०२०'
+            },
+            {
+                name: 'श्री निलेश गिरेंद्र लोहार',
+                position: 'सदस्य',
+                phone: '८६९८९४०९०९',
+                email: 'nilesh.g.lohar@example.com',
+                address: 'कल्याण, जि. ठाणे',
+                education: 'H.S.C/ मेकॅनिकल डिप्लोमा',
+                job: 'सेल्स/रिप्रेझेंटेटीव एक्ज्यूकेटिव्ह',
+                description: '',
+                imageUrl: '',
+                isActive: true,
+                order: 11,
+                tenure: 'कार्यकाल २०१७ - २०२०'
+            },
+            {
+                name: 'श्री निलेश रतिलाल पवार',
+                position: 'सदस्य',
+                phone: '८१०८८८७०५५',
+                email: 'nilesh.pawar@example.com',
+                address: 'कल्याण, जि. ठाणे',
+                education: 'M.A Bed',
+                job: 'पोलीस नायक(महाराष्ट्रपोलीस)',
+                description: '',
+                imageUrl: '',
+                isActive: true,
+                order: 12,
+                tenure: 'कार्यकाल २०१७ - २०२०'
+            }
+        ];
+
+        async function addExecutiveCommittee() {
+            const btn = document.getElementById('addCommitteeBtn');
+            const status = document.getElementById('status');
+            
+            btn.disabled = true;
+            btn.textContent = 'जोडत आहे...';
+            status.innerHTML = '<div class="loading">कार्यकारिणी समिती Firebase मध्ये जोडत आहे...</div>';
+            
+            try {
+                // Clear existing data
+                const q = query(collection(db, 'executiveCommittee'), orderBy('order', 'asc'));
+                const querySnapshot = await getDocs(q);
+                
+                for (const docSnapshot of querySnapshot.docs) {
+                    await deleteDoc(doc(db, 'executiveCommittee', docSnapshot.id));
+                }
+                
+                // Add new data
+                for (const member of executiveCommitteeData) {
+                    await addDoc(collection(db, 'executiveCommittee'), {
+                        ...member,
+                        createdAt: serverTimestamp(),
+                        updatedAt: serverTimestamp()
+                    });
+                }
+                
+                status.innerHTML = '<div class="success">✅ सर्व कार्यकारिणी सदस्य यशस्वीरित्या Firebase मध्ये जोडले गेले!</div>';
+                btn.textContent = 'पूर्ण झाले ✅';
+                
+            } catch (error) {
+                console.error('Error:', error);
+                status.innerHTML = `<div class="error">❌ त्रुटी: ${error.message}</div>`;
+                btn.disabled = false;
+                btn.textContent = 'पुन्हा प्रयत्न करा';
+            }
+        }
+
+        document.getElementById('addCommitteeBtn').addEventListener('click', addExecutiveCommittee);
+    </script>
+</body>
+</html>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { executiveCommitteeService, ExecutiveCommittee as ExecutiveCommitteeMember } from '../services/firebaseService';
 import { initializeExecutiveCommittee } from '../utils/initializeData';
+import { getOptimizedImageUrl } from '../config/cloudinary';
 
 const ExecutiveCommittee: React.FC = () => {
   const [executiveMembers, setExecutiveMembers] = useState<ExecutiveCommitteeMember[]>([]);
@@ -172,10 +173,14 @@ const ExecutiveCommittee: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {executiveMembers.map((member, index) => (
             <div key={member.id || index} className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
-              {(member.imageUrl || member.photo) && (
+              {(member.imageUrl || (member as any).photo) && (
                 <div className="h-56 overflow-hidden">
                   <img
-                    src={member.imageUrl || member.photo}
+                    src={
+                      (member as any).imagePublicId
+                        ? getOptimizedImageUrl((member as any).imagePublicId, { width: 400, height: 224, crop: 'fill' })
+                        : member.imageUrl || (member as any).photo
+                    }
                     alt={member.name}
                     className="w-full h-full object-cover object-center"
                   />
