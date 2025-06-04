@@ -1,11 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Banner from '../components/Banner';
 import NewsCard from '../components/NewsCard';
 import VisitorCounter from '../components/VisitorCounter';
 import { Link } from 'react-router-dom';
 import { Users, FileText, Calendar, Award } from 'lucide-react';
+import { communityInfoService, CommunityInfo } from '../services/firebaseService';
+import { initializeHomeContent } from '../utils/initializeData';
 
 const HomePage: React.FC = () => {
+  const [homeContent, setHomeContent] = useState<CommunityInfo[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    loadHomeContent();
+  }, []);
+
+  const loadHomeContent = async () => {
+    try {
+      // Initialize content if it doesn't exist
+      await initializeHomeContent();
+
+      // Load content from Firebase
+      const content = await communityInfoService.getBySection('about');
+      setHomeContent(content as CommunityInfo[]);
+    } catch (error) {
+      console.error('Error loading home content:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const newsItems = [
     {
       id: 1,
@@ -64,12 +88,35 @@ const HomePage: React.FC = () => {
       {/* Welcome Section */}
       <section className="py-16 bg-white">
         <div className="container-custom">
-          <div className="text-center max-w-3xl mx-auto">
+          <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-3xl md:text-4xl font-bold mb-6 text-primary-700">गाडी लोहार समाज उन्नती मंडळ</h1>
-            <p className="text-lg text-gray-700 mb-8">
-              गाडी लोहार समाज हा अत्यंत पुरातन समाज असून त्याचा इतिहास अत्यंत समृद्ध आहे. समाजाचे उन्नयन आणि विकासासाठी आमचे मंडळ सतत प्रयत्नशील आहे. सामाजिक, शैक्षणिक व आर्थिक विकासासाठी विविध उपक्रम राबविण्यात येतात.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
+
+            {isLoading ? (
+              <div className="flex justify-center items-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-700"></div>
+                <span className="ml-2 text-gray-600">माहिती लोड करत आहे...</span>
+              </div>
+            ) : homeContent.length > 0 ? (
+              <div className="space-y-8 text-left">
+                {homeContent.map((content, index) => (
+                  <div key={content.id || index} className="bg-gray-50 p-6 rounded-lg">
+                    <h2 className="text-xl md:text-2xl font-semibold mb-4 text-primary-700">{content.title}</h2>
+                    {content.description && (
+                      <p className="text-lg text-gray-600 mb-4 italic">{content.description}</p>
+                    )}
+                    <div className="text-gray-700 leading-relaxed whitespace-pre-line">
+                      {content.content}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-lg text-gray-700 mb-8">
+                गाडी लोहार समाज हा अत्यंत पुरातन समाज असून त्याचा इतिहास अत्यंत समृद्ध आहे. समाजाचे उन्नयन आणि विकासासाठी आमचे मंडळ सतत प्रयत्नशील आहे. सामाजिक, शैक्षणिक व आर्थिक विकासासाठी विविध उपक्रम राबविण्यात येतात.
+              </p>
+            )}
+
+            <div className="flex flex-wrap justify-center gap-4 mt-8">
               <Link to="/activities" className="btn btn-primary">
                 उपक्रम पहा
               </Link>

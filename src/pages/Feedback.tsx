@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { saveFeedbackData } from '../utils/storage';
 
 const Feedback: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -20,16 +21,27 @@ const Feedback: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('अभिप्राय यशस्वीरित्या सबमिट केला!');
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      feedbackType: '',
-      message: '',
-      rating: '',
-    });
+
+    try {
+      // Save data to localStorage
+      const entryId = saveFeedbackData(formData);
+      console.log('Feedback data saved with ID:', entryId);
+
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        feedbackType: '',
+        message: '',
+        rating: '',
+      });
+
+      alert('अभिप्राय यशस्वीरित्या सबमिट केला! तुमचा अभिप्राय आम्हाला मिळाला आहे.');
+    } catch (error) {
+      console.error('Error saving feedback data:', error);
+      alert('अभिप्राय सबमिट करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.');
+    }
   };
 
   return (

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { saveBrideGroomData } from '../utils/storage';
 
 const BrideGroom: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -29,9 +30,36 @@ const BrideGroom: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('फॉर्म यशस्वीरित्या सबमिट केला!');
-    // Here you would typically send this data to your backend
+
+    try {
+      // Save data to localStorage
+      const entryId = saveBrideGroomData(formData);
+      console.log('Bride/Groom data saved with ID:', entryId);
+
+      // Reset form
+      setFormData({
+        name: '',
+        gender: '',
+        dob: '',
+        height: '',
+        education: '',
+        occupation: '',
+        income: '',
+        address: '',
+        city: '',
+        district: '',
+        mobile: '',
+        email: '',
+        biodata: '',
+        expectations: '',
+        photo: '',
+      });
+
+      alert('वधू-वर नोंदणी यशस्वीरित्या पूर्ण झाली! तुमची माहिती सुरक्षित ठेवली आहे.');
+    } catch (error) {
+      console.error('Error saving bride/groom data:', error);
+      alert('नोंदणी करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.');
+    }
   };
 
   const profiles = [

@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-pdf-viewer/core": "^3.12.0",
     "@react-pdf-viewer/default-layout": "^3.12.0",
+    "firebase": "^11.8.1",
     "framer-motion": "^12.7.4",
     "gadi-lohar-samaj-website": "file:",
     "lucide-react": "^0.344.0",

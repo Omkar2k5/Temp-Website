@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { saveCensusData } from '../utils/storage';
 
 const Census: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -26,9 +27,33 @@ const Census: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('फॉर्म यशस्वीरित्या सबमिट केला!');
-    // Here you would typically send this data to your backend
+
+    try {
+      // Save data to localStorage
+      const entryId = saveCensusData(formData);
+      console.log('Census data saved with ID:', entryId);
+
+      // Reset form
+      setFormData({
+        headName: '',
+        familyMembers: '',
+        address: '',
+        city: '',
+        district: '',
+        pincode: '',
+        mobile: '',
+        email: '',
+        occupation: '',
+        income: '',
+        ownHouse: '',
+        education: '',
+      });
+
+      alert('खानेसुमारी नोंदणी यशस्वीरित्या पूर्ण झाली! तुमची माहिती सुरक्षित ठेवली आहे.');
+    } catch (error) {
+      console.error('Error saving census data:', error);
+      alert('नोंदणी करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.');
+    }
   };
 
   const censusStats = [

@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Calendar, 
-  Award, 
-  Users, 
-  HandHeart, 
-  Building2, 
+import {
+  Calendar,
+  Award,
+  Users,
+  HandHeart,
+  Building2,
   Trophy,
   GraduationCap,
   Handshake,
   ScrollText,
   Building
 } from 'lucide-react';
+import { saveMemberData } from '../utils/storage';
 
 const Members: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -37,11 +38,35 @@ const Members: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('फॉर्म यशस्वीरित्या सबमिट केला!');
-    // Here you would typically send this data to your backend
+
+    try {
+      // Save data to Firebase/localStorage
+      const memberId = await saveMemberData(formData);
+      console.log('Member data saved with ID:', memberId);
+
+      // Reset form
+      setFormData({
+        name: '',
+        dob: '',
+        gender: '',
+        address: '',
+        city: '',
+        district: '',
+        pincode: '',
+        mobile: '',
+        email: '',
+        education: '',
+        occupation: '',
+        familyMembers: '',
+      });
+
+      alert('सभासद नोंदणी यशस्वीरित्या पूर्ण झाली! तुमची माहिती सुरक्षित ठेवली आहे.');
+    } catch (error) {
+      console.error('Error saving member data:', error);
+      alert('नोंदणी करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.');
+    }
   };
 
   const fadeInUp = {

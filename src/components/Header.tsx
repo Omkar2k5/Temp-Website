@@ -61,6 +61,12 @@ const Header: React.FC<HeaderProps> = ({ isScrolled }) => {
               <Phone size={16} />
               <span>९८६९३५८८६४</span>
             </a>
+            <Link
+              to="/admin/login"
+              className="text-xs text-white hover:text-secondary-400 transition-colors"
+            >
+              प्रशासक
+            </Link>
           </div>
         </div>
       </div>

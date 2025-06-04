@@ -1,7 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { executiveCommitteeService, ExecutiveCommittee as ExecutiveCommitteeMember } from '../services/firebaseService';
+import { initializeExecutiveCommittee } from '../utils/initializeData';
 
 const ExecutiveCommittee: React.FC = () => {
-  const executiveMembers = [
+  const [executiveMembers, setExecutiveMembers] = useState<ExecutiveCommitteeMember[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    loadExecutiveCommittee();
+  }, []);
+
+  const loadExecutiveCommittee = async () => {
+    try {
+      // Initialize committee if it doesn't exist
+      await initializeExecutiveCommittee();
+
+      // Load committee from Firebase
+      const committee = await executiveCommitteeService.getAll();
+      setExecutiveMembers(committee.filter(member => member.isActive) as ExecutiveCommitteeMember[]);
+    } catch (error) {
+      console.error('Error loading executive committee:', error);
+      // Fallback to static data if Firebase fails
+      setExecutiveMembers(fallbackExecutiveMembers);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Fallback static data
+  const fallbackExecutiveMembers = [
     {
       id: 1,
       name: 'श्री युवराज मुरार जाधव',
@@ -132,39 +159,45 @@ const ExecutiveCommittee: React.FC = () => {
           गाडी लोहार समाज उन्नती मंडळाच्या कार्यकारिणीची माहिती.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {executiveMembers.map((member) => (
-            <div key={member.id} className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
-              <div className="h-56 overflow-hidden">
-                <img 
-                  src={member.image} 
-                  alt={member.name} 
-                  className="w-full h-full object-cover object-center"
-                />
-              </div>
+        {isLoading ? (
+          <div className="flex justify-center items-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-700"></div>
+            <span className="ml-2 text-gray-600">माहिती लोड करत आहे...</span>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {executiveMembers.map((member, index) => (
+            <div key={member.id || index} className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
+              {member.photo && (
+                <div className="h-56 overflow-hidden">
+                  <img
+                    src={member.photo}
+                    alt={member.name}
+                    className="w-full h-full object-cover object-center"
+                  />
+                </div>
+              )}
               <div className="p-4">
                 <h2 className="text-lg font-bold text-primary-700">{member.name}</h2>
                 <p className="text-secondary-600 font-medium mb-2">{member.position}</p>
-                {member.education && (
+                {member.description && (
+                  <p className="text-gray-700 text-sm mb-2">{member.description}</p>
+                )}
+                {member.phone && (
                   <p className="text-gray-700 text-sm mb-1">
-                    <span className="font-medium">शिक्षण:</span> {member.education}
+                    <span className="font-medium">फोन:</span> {member.phone}
                   </p>
                 )}
-                {member.job && (
-                  <p className="text-gray-700 text-sm mb-1">
-                    <span className="font-medium">व्यवसाय:</span> {member.job}
+                {member.email && (
+                  <p className="text-gray-700 text-sm">
+                    <span className="font-medium">ईमेल:</span> {member.email}
                   </p>
                 )}
-                <p className="text-gray-700 text-sm mb-1">
-                  <span className="font-medium">फोन:</span> {member.phone}
-                </p>
-                <p className="text-gray-700 text-sm">
-                  <span className="font-medium">ईमेल:</span> {member.email}
-                </p>
               </div>
             </div>
           ))}
-        </div>
+          </div>
+        )}
 
         <div className="mt-12">
           <h2 className="text-2xl font-bold mb-4 text-primary-700">मंडळाची उद्दिष्टे</h2>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { saveContactData } from '../utils/storage';
 
 const ContactForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -18,15 +19,25 @@ const ContactForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send the form data to your backend
-    console.log('Form submitted:', formData);
-    alert('फॉर्म यशस्वीरित्या सबमिट केला!');
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      message: '',
-    });
+
+    try {
+      // Save data to localStorage
+      const entryId = saveContactData(formData);
+      console.log('Contact data saved with ID:', entryId);
+
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        message: '',
+      });
+
+      alert('संपर्क फॉर्म यशस्वीरित्या सबमिट केला! आम्ही लवकरच तुमच्याशी संपर्क साधू.');
+    } catch (error) {
+      console.error('Error saving contact data:', error);
+      alert('फॉर्म सबमिट करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.');
+    }
   };
 
   return (
